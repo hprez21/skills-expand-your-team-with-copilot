@@ -153,6 +153,17 @@ initial_activities = {
         "max_participants": 18,
         "participants": ["isabella@mergington.edu", "lucas@mergington.edu"]
     },
+    "Manga Maniacs": {
+        "description": "Dive into epic battles, unforgettable heroes, and bold adventures inspired by Japanese Manga (graphic novels)!",
+        "schedule": "Tuesdays at 5pm",
+        "schedule_details": {
+            "days": ["Tuesday"],
+            "start_time": "17:00",
+            "end_time": "18:00"
+        },
+        "max_participants": 25,
+        "participants": []
+    },
     "Sunday Chess Tournament": {
         "description": "Weekly tournament for serious chess players with rankings",
         "schedule": "Sundays, 2:00 PM - 5:00 PM",
@@ -186,4 +197,3 @@ initial_teachers = [
         "role": "admin"
     }
 ]
-
