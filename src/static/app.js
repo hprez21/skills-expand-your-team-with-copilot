@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const userInfo = document.getElementById("user-info");
   const displayName = document.getElementById("display-name");
   const logoutButton = document.getElementById("logout-button");
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const themeLabel = document.getElementById("theme-label");
   const loginModal = document.getElementById("login-modal");
   const loginForm = document.getElementById("login-form");
   const closeLoginModal = document.querySelector(".close-login-modal");
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
+  let currentTheme = "light";
 
   // Authentication state
   let currentUser = null;
@@ -50,6 +54,28 @@ document.addEventListener("DOMContentLoaded", () => {
     afternoon: { start: "15:00", end: "18:00" }, // After school hours
     weekend: { days: ["Saturday", "Sunday"] }, // Weekend days
   };
+
+  function updateThemeUI() {
+    const isDarkMode = currentTheme === "dark";
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    themeIcon.textContent = isDarkMode ? "☀️" : "🌙";
+    themeLabel.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
+    themeToggle.setAttribute("aria-pressed", isDarkMode.toString());
+  }
+
+  function initializeTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark" || savedTheme === "light") {
+      currentTheme = savedTheme;
+    }
+    updateThemeUI();
+  }
+
+  function toggleTheme() {
+    currentTheme = currentTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", currentTheme);
+    updateThemeUI();
+  }
 
   // Initialize filters from active elements
   function initializeFilters() {
@@ -237,6 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event listeners for authentication
   loginButton.addEventListener("click", openLoginModal);
   logoutButton.addEventListener("click", logout);
+  themeToggle.addEventListener("click", toggleTheme);
   closeLoginModal.addEventListener("click", closeLoginModalHandler);
 
   // Close login modal when clicking outside
@@ -862,6 +889,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Initialize app
+  initializeTheme();
   checkAuthentication();
   initializeFilters();
   fetchActivities();
