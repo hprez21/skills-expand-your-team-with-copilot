@@ -472,6 +472,62 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function createShareLinks(activityName, description) {
+    const activityUrl = new URL(window.location.href);
+    activityUrl.searchParams.set("activity", activityName);
+
+    const shareUrl = activityUrl.toString();
+    const shareText = `Check out ${activityName} at Mergington High School: ${description}`;
+    const emailSubject = `Join me in ${activityName}`;
+    const emailBody = `${shareText}\n\n${shareUrl}`;
+
+    return {
+      shareUrl,
+      shareText,
+      xUrl: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        shareText
+      )}&url=${encodeURIComponent(shareUrl)}`,
+      facebookUrl: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}`,
+      emailUrl: `mailto:?subject=${encodeURIComponent(
+        emailSubject
+      )}&body=${encodeURIComponent(emailBody)}`,
+    };
+  }
+
+  async function handleNativeShare(activityName, description, shareUrl) {
+    const shareText = `Check out ${activityName} at Mergington High School: ${description}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Mergington Activity: ${activityName}`,
+          text: shareText,
+          url: shareUrl,
+        });
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return;
+        }
+        console.error("Native sharing failed:", error);
+      }
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        showMessage("Share details copied to clipboard.", "info");
+        return;
+      } catch (error) {
+        console.error("Clipboard copy failed:", error);
+      }
+    }
+
+    showMessage("Use the social links to share this activity.", "info");
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
     const activityCard = document.createElement("div");
@@ -498,6 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Format the schedule using the new helper function
     const formattedSchedule = formatSchedule(details);
+    const shareLinks = createShareLinks(name, details.description);
 
     // Create activity tag
     const tagHtml = `
@@ -569,6 +626,18 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="social-share-actions">
+        <button class="share-button native-share-button" type="button">Share</button>
+        <a class="share-button share-link" href="${
+          shareLinks.xUrl
+        }" target="_blank" rel="noopener noreferrer">Share on X</a>
+        <a class="share-button share-link" href="${
+          shareLinks.facebookUrl
+        }" target="_blank" rel="noopener noreferrer">Share on Facebook</a>
+        <a class="share-button share-link" href="${
+          shareLinks.emailUrl
+        }">Share by Email</a>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -586,6 +655,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    const nativeShareButton = activityCard.querySelector(".native-share-button");
+    nativeShareButton.addEventListener("click", () => {
+      handleNativeShare(name, details.description, shareLinks.shareUrl);
+    });
 
     activitiesList.appendChild(activityCard);
   }
