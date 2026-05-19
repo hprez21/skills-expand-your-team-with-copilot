@@ -30,6 +30,26 @@
   --error-light: #ffebee;
   --info: #0c5460;
   --info-light: #d1ecf1;
+  --header-control-background: rgba(255, 255, 255, 0.2);
+  --header-control-background-hover: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode {
+  --background: #121212;
+  --surface: #1e1e1e;
+  --text-primary: #f0f0f0;
+  --text-secondary: #bdbdbd;
+  --border: #3a3a3a;
+  --border-light: #2a2a2a;
+  --border-focus: #555555;
+  --primary: #3949ab;
+  --primary-light: #5c6bc0;
+  --primary-dark: #283593;
+  --warning-light: #4a3b00;
+  --error-light: #4b1f24;
+  --info-light: #14333a;
+  --header-control-background: rgba(255, 255, 255, 0.12);
+  --header-control-background-hover: rgba(255, 255, 255, 0.2);
 }
 
 * {
@@ -617,6 +637,9 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #user-status {
@@ -639,7 +662,7 @@ footer {
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--header-control-background);
   border-radius: 20px;
   padding: 4px 12px;
   font-size: 0.85rem;
@@ -647,7 +670,7 @@ footer {
 }
 
 .icon-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--header-control-background-hover);
 }
 
 .user-icon {
@@ -656,11 +679,11 @@ footer {
 
 #logout-button {
   padding: 3px 10px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--header-control-background);
   font-size: 0.8rem;
   border-radius: 20px;
 }
 
 #logout-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--header-control-background-hover);
 }
